@@ -1,4 +1,4 @@
-package defining;
+package definition;
 
 /**
  * Definindo Thread por extensão da classe "Thread"

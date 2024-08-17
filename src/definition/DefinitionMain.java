@@ -1,6 +1,6 @@
-package defining;
+package definition;
 
-public class DefiningMain {
+public class DefinitionMain {
 
     public static void main(String[] args) {
         // Extensão de Thread

@@ -1,4 +1,4 @@
-package defining;
+package definition;
 
 public class ThreadRunnableImpl implements Runnable {
 

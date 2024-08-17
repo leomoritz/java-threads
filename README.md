@@ -87,3 +87,44 @@ public class MinhaThread extends Thread {
 ### Considerações sobre Threads em Java
 - **Sincronização:** Quando várias threads acessam os mesmos recursos, é importante sincronizá-las para evitar condições de corrida.
 - **Executores:** Java fornece a API Executors para gerenciamento mais eficiente de threads, como o uso de pools de threads.
+
+## Conclusão
+A programação paralela é desafiadora. É fácil pensar de maneira sequencial, com todas as instruções ocorrendo de forma encadeada ao longo de uma única linha de execução, mas quando o programa envolve múltiplas linhas que se entrecruzam, a situação suscita problemas inexistentes no caso de uma única linha.
+
+A chamada condição de corrida, frequentemente, se faz presente, exigindo do programador uma atenção especial. Vimos os mecanismos que Java oferece para permitir a sincronização de threads, mas esses mecanismos precisam ser apropriadamente empregados. Dependendo do tamanho do programa e do número de threads, controlar essa dinâmica mentalmente é desejar o erro.
+
+Erros em programação paralela são mais difíceis de localizar, pela própria forma como o sistema funciona.
+
+Há algumas práticas simples que podem auxiliar o programador a evitar os erros, como:
+- **Evitar o uso de variáveis globais:** Variáveis globais são compartilhadas por todas as threads e podem levar a condições de corrida.
+- **Usar variáveis locais:** Variáveis locais são armazenadas na pilha de execução da thread e não são compartilhadas entre threads.
+- **Usar métodos sincronizados:** Métodos sincronizados garantem que apenas uma thread possa acessar o método por vez.
+- **Usar blocos sincronizados:** Blocos sincronizados permitem que apenas uma thread possa acessar um bloco de código por vez.
+- **Usar uma IDE adequada:** IDEs modernas, como IntelliJ IDEA e Eclipse, possuem ferramentas para ajudar a depurar problemas de concorrência.
+- **Usar metodologias como UML:** Um bom profissional de programação é ligado a metodologias. E uma boa prática, nesse caso, é a elaboração de diagramas dinâmicos do sistema, como o diagrama de sequência e o diagrama de objetos da UML (em inglês, Unified Modeling Language; em português, Linguagem Unificada de Modelagem), por exemplo. Esses são mecanismos formais que permitem compreender a interação entre os componentes do sistema.
+- **Atenção aos detalhes:** Além dessas questões, há sutilezas na programação que muitas vezes passam despercebidas e podem levar o software a se comportar de forma diferente da esperada, já que a linguagem Java oculta os mecanismos de apontamento de memória. Se por um lado isso facilita a programação, por outro exige atenção do programador quando estiver trabalhando com tipos não primitivos. Por exemplo, uma variável do tipo “int” é passada por cópia, mas uma variável do tipo de uma classe definida pelo usuário é passada por referência. Isso tem implicações importantes quando estamos construindo um tipo de dado imutável.
+
+Veja a classe mostrada no código a seguir:
+
+```java
+public final class Imutavel {
+
+    private final Contador conta;
+
+    protected Imutavel() {
+        this.conta = new Contador(0);
+    }
+}
+```
+
+Queremos construir uma classe que nos fornecerá um objeto imutável. Por sua simplicidade, e já que a tornamos final, assim como seu único atributo, esse deveria ser o caso. Mas examinemos melhor a linha 3. Essa linha diz que “conta” é uma referência imutável. Isso quer dizer que, uma vez instanciada (linha 7), ela não poderá se referenciar a outro objeto, mas nada impede que o objeto por ela apontado se modifique, o que pode ocorrer se a referência vazar ou se o próprio objeto realizar interações que o levem a tal.
+
+### Atenção
+Lembre-se: quando se trata de tipos não primitivos, a variável é uma referência de um tipo, e não o tipo em si.
+
+Como se não bastassem todas essas questões, temos o escalonador do sistema, que pode fazer o software se comportar diferentemente do esperado, se tivermos em mente uma política distinta da do escalonador. Questões relativas à carga do sistema também podem interferir, e por isso a corretude do software tem de ser garantida. É comum, quando há falhas na garantia da sincronização, que o programa funcione em algumas execuções e falhe em outras, sem que nada tenha sido modificado. Essa sensibilidade às condições de execução é praticamente um atestado de problemas e condições de corrida que não foram adequadamente tratadas.
+
+Por fim, um bom conhecimento do como as threads se comportam é essencial. Isso é importante para evitar que threads morram inadvertidamente, transformando outras em “zumbis”. Também é um ponto crítico quando operações de E/S ocorrem, pois são operações que muitas vezes podem bloquear a thread indefinidamente.
+
+## Referências
+- PROGRAMAÇÃO PARALELA EM JAVA: THREADS (Prof. Marlos de Mendonça Corrêa) - UNIVERSIDADE ESTÁCIO DE SÁ. Disponível em: https://online.estacio.br/l/certificacao-back-end. Acesso em: 17 de agosto de 2024.
